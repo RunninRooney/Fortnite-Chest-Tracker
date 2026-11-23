@@ -20,6 +20,22 @@ Windows · free · open source · reads only the screen and Fortnite's own files
 
 <p align="center"><img src="docs/share-card.png" width="640" alt="A Share my stats picture"></p>
 
+## Screenshots
+
+Real games from the squad that made it (player names blurred).
+
+**Home**: your totals, chests per day, when you play, the squad right now and recent games.
+<p align="center"><img src="docs/home.png" width="860" alt="The Home page"></p>
+
+**Games**: every match with chests opened and broken, the squad's total, chests a minute, where you landed and what you found.
+<p align="center"><img src="docs/games.png" width="860" alt="The Games page"></p>
+
+**Map, one game**: the whole squad's routes from the match replay, with every chest opened (circles), broken (squares) and the timeline below.
+<p align="center"><img src="docs/map-routes.png" width="860" alt="A squad's routes in one game"></p>
+
+**Map, heatmap**: where the squad opens the most chests, over all your games.
+<p align="center"><img src="docs/map-heatmap.png" width="860" alt="A heatmap of chests opened"></p>
+
 ## Install
 
 1. Download `ChestTracker.zip` from the [latest release](../../releases/latest) and unzip it somewhere
