@@ -61,7 +61,6 @@ only sees the ones broken near you. A squadmate who runs Chest Tracker too share
 
 ```
 python -m unittest discover -s tests     # the tests (they never touch your real settings)
-node tests/web/crypto_test.mjs ...       # the web page's unlocking (see the file)
 python tools/make_release.py             # build dist/ChestTracker.zip + dist/update.json for a release
 python tools/make_logo_assets.py         # remake the icons from assets/logo_source.png
 ```
@@ -75,7 +74,6 @@ python tools/make_logo_assets.py         # remake the icons from assets/logo_sou
 | `launcher.py`, `edition.py` | Updates, start-up checks, public vs personal builds |
 | `setup_wizard.py`, `share_card.py` | First-run setup, Share my stats |
 | `reader_src/` | The replay reader (C#, built on each PC by `setup_reader.bat`) |
-| `web/` | A read-only squad page for phones (static, works on GitHub Pages) |
 
 **Your own fork**: run `tools/make_release.py` once to make your own signing key, put its public half in
 `PUBLISHER_KEY` in `launcher.py` and your repository in `GITHUB_REPO` in `edition.py`.

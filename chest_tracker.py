@@ -3059,11 +3059,6 @@ class NetLink(threading.Thread):
                         client.publish(f"{base}/map/{me}", self.app.team.seal(got[1]), qos=0)
                     if got:
                         sent["map"] = got[0]
-                    # the game that just ended, for the phone page (retained; again when the replay recounts)
-                    got = self._shared("last", mgr.last_message)
-                    if got and got[0] != sent.get("last"):
-                        client.publish(f"{base}/last/{me}", self.app.team.seal(got[1]), qos=1, retain=True)
-                        sent["last"] = got[0]
                 if now - self._credits_checked.get(host, -1e9) > 20:
                     self._credits_checked[host] = now
                     try:

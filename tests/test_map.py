@@ -877,31 +877,6 @@ class ManagerTests(unittest.TestCase):
         m.spots.save()
         self.assertIn("s1", json.loads(m.spots.path.read_text())["43"])
 
-    def test_last_game_message_for_the_phone_page(self):
-        app, m = self.make()
-        app.team.key = "k"
-        app.stats.game, app.stats.game_started = 0, 1000.0
-        playing = [True]
-        app.match_in_progress = lambda: playing[0]
-        m._start_live(time.time())
-        m.live["route"].append([time.time(), 1000.0, 900.0, 0])
-        m.live["chests"].append({"t": time.time(), "x": 1000.0, "y": 900.0, "spot": None})
-        app.stats.game = 63
-        self.assertIsNone(m.last_message())  # never mid-match
-        playing[0] = False
-        m._end_live()
-        msg = json.loads(m.last_message())
-        self.assertEqual((msg["app"], msg["type"], msg["team"], msg["game"]), ("chesttracker-map", "last", "k", 63))
-        self.assertEqual(msg["match"], m.live["id"])
-        self.assertEqual(len(msg["hist"]["route"]), 1)
-        self.assertIsNone(m.last_message())  # once
-        app.stats.game = 94  # the replay recounted this game
-        self.assertEqual(json.loads(m.last_message())["game"], 94)
-        self.assertIsNone(m.last_message())
-        app.stats.game, app.stats.game_started = 1, 2000.0  # the counter moved on to a new game: not this one
-        self.assertIsNone(m.last_message())
-        self.assertNotEqual(msg["app"], "chesttracker")  # Team.update (old trackers too) only takes "chesttracker"
-
     def test_team_message_round_trip(self):
         app, m = self.make()
         m._start_live(time.time())

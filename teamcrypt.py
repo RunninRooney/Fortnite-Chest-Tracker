@@ -9,7 +9,6 @@ RFC test vectors in tests/test_teamcrypt.py:
   * X25519 (RFC 7748) seals debug reports to the publisher's public key (see launcher.send_report): only
     the publisher can read them.
 
-The web page (web/crypto.js) does exactly the same, so the phone page can read the squad too.
 A longer code is a stronger lock: the setup window suggests a random one.
 """
 from __future__ import annotations

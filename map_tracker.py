@@ -819,8 +819,6 @@ class MapManager:
         self._last_track = 0.0
         self._break_next = False
         self._last_hist_send = 0.0
-        self._last_due = None       # a live record that ended and isn't sent to the phone page yet
-        self._last_sent = None      # (match id, game count, counter's game) last sent as the "last game" message
         self._index_path = self.maps_dir / "index.json"
         self._index_lock = threading.Lock()
         self._index: dict = self._load_index()  # read now: the chest counter may add to it before the loop runs
@@ -1097,7 +1095,6 @@ class MapManager:
             live = self.live
         if live and (live["route"] or live["chests"]):
             self._save_live(live)
-            self._last_due = live["id"]  # the phone page's after-game view (see last_message)
 
     def _save_live(self, live: dict):
         d = self.dir / "live"
@@ -1192,35 +1189,6 @@ class MapManager:
             self._last_hist_send = now
         return json.dumps(msg, separators=(",", ":")).encode()
 
-    def last_message(self) -> bytes | None:
-        """The game that just ended, for the team's phone page: one retained message (my own route and
-        chests, squad only, like team_message), sent once when the match ends and again when the replay
-        changes this game's count (e.g. 63 -> 94). None when there's nothing new to send; never mid-match."""
-        if not self.app.cfg.get("map_share", True):
-            return None
-        try:
-            if self.app.match_in_progress():
-                return None
-        except Exception:
-            return None
-        game = int(getattr(self.app.stats, "game", 0) or 0)
-        counting = getattr(self.app.stats, "game_started", None)  # which game the counter is on
-        with self.lock:
-            live = self.live
-            if live is None or not (live["route"] or live["chests"]):
-                return None
-            sent = self._last_sent
-            recount = sent and sent[0] == live["id"] and sent[2] == counting and sent[1] != game
-            if self._last_due != live["id"] and not recount:
-                return None  # already sent and the count hasn't changed (or the counter moved on to a new game)
-            hist = self._history(live)
-        self._last_due = None
-        self._last_sent = (live["id"], game, counting)
-        msg = {"app": "chesttracker-map", "type": "last", "team": self.app.team.key, "id": self.app.stats.id,
-               "name": str(self.app.cfg.get("name") or "")[:20], "match": live["id"], "end": round(time.time(), 1),
-               "game": game, "hist": hist}
-        return json.dumps(msg, separators=(",", ":")).encode()
-
     @staticmethod
     def _history(live: dict) -> dict:
         """This match so far, small: {"start", "route": [[s, x, y]] (a point every 5 s at most, 300 at most),
@@ -1239,7 +1207,7 @@ class MapManager:
 
     def guest_positions(self, now: float) -> list[dict]:
         """Where console squadmates (no tracker of their own) are, from the replay being recorded, for the
-        team's web page (web/). Only console teammates from settings and names teammates claimed, never
+        squad's map windows. Only console teammates from settings and names teammates claimed, never
         random squad fills; teammates sharing their own position over the relay are left out."""
         def norm(n):
             return "".join(str(n or "").split()).lower()
