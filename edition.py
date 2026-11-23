@@ -22,7 +22,7 @@ APP_DIR = Path(__file__).resolve().parent
 PERSONAL_DIR = APP_DIR / "personal"
 
 # The GitHub repository public updates come from ("owner/name"). Empty: no update checks.
-GITHUB_REPO = ""
+GITHUB_REPO = "RunninRooney/Fortnite-Chest-Tracker"
 
 DEFAULTS = {
     "name": "public",
