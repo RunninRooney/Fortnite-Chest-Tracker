@@ -1,0 +1,30 @@
+# Personal build: squad settings, publish tools, private notes. Never public (see edition.py).
+personal/
+
+# Built or downloaded on each PC
+reader/
+reader_src/bin/
+reader_src/obj/
+dist/
+*.zip
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Keys and private data, wherever they end up
+*.hex
+*.key
+*.pem
+config.json
+team.json
+stats.json
+replays.json
+*.replay
+*.log
+debug_frames/
+
+# A font you add yourself (fonts you can't share, like Fortnite's own)
+fonts/
